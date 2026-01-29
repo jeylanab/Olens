@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react"; 
-import { Link } from "react-router-dom"; // 1. Added Link import
+import { Menu, X, ArrowRight, MessageCircle } from "lucide-react"; // Added MessageCircle for a social link
+import { Link } from "react-router-dom";
 import logoImg from "../assets/logo.svg"; 
 
 export default function Navbar() {
@@ -20,7 +20,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 2. Added slashes to matches your App routes
   const navLinks = [
     { name: "Services", href: "/services" }, 
     { name: "Portfolio", href: "/portfolio" },
@@ -45,11 +44,11 @@ export default function Navbar() {
         animate={{ y: 0 }}
         className={`max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl transition-all duration-300 ${
           scrolled 
-          ? "bg-white/90 backdrop-blur-xl shadow-2xl border border-white/20 py-1"
+          ? "bg-white/90 backdrop-blur-xl shadow-2xl border border-white/20 py-2"
           : "bg-transparent py-4"
         }`}
       >
-        {/* Logo - Use Link to go home */}
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2 cursor-pointer group">
           <img 
             src={logoImg} 
@@ -58,13 +57,13 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop Navigation - Changed to Link */}
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.name}
-              to={link.href} // Use 'to' instead of 'href'
-              className="text-xs font-bold uppercase tracking-widest text-gray-700 hover:text-[#15803D] transition-colors relative group"
+              to={link.href}
+              className="text-[11px] font-black uppercase tracking-widest text-gray-700 hover:text-[#15803D] transition-colors relative group"
             >
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#15803D] transition-all group-hover:w-full"></span>
@@ -72,24 +71,36 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop Actions */}
+        {/* Desktop Actions - Replaced Login with Social/WhatsApp */}
         <div className="hidden md:flex items-center gap-6">
-          <button className="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-black transition">Login</button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            style={{ backgroundColor: colors.ochreGold }}
-            className="px-5 py-2.5 rounded-xl text-white font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg flex items-center gap-2"
+          <a 
+            href="https://wa.me/YOURNUMBER" // Or your Telegram link
+            target="_blank" 
+            rel="noreferrer"
+            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-[#15803D] transition"
           >
-            Start your Project <ArrowRight size={14} />
-          </motion.button>
+            <MessageCircle size={16} /> Let's Talk
+          </a>
+
+          <Link to="/pricing"> {/* Redirects to quote section */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{ backgroundColor: colors.forestGreen }} // Changed to Green for "Go" signals
+              className="px-6 py-3 rounded-xl text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-lg flex items-center gap-2"
+            >
+              Join Free <ArrowRight size={14} />
+            </motion.button>
+          </Link>
         </div>
 
+        {/* Mobile Toggle */}
         <button onClick={() => setOpen(!open)} className="md:hidden p-2 text-gray-900 z-[200]">
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </motion.nav>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {open && (
           <>
@@ -106,9 +117,9 @@ export default function Navbar() {
               initial="closed"
               animate="opened"
               exit="closed"
-              className="fixed top-0 right-0 h-full w-[80%] bg-white z-[150] shadow-[-20px_0_60px_rgba(0,0,0,0.1)] flex flex-col p-10 md:hidden"
+              className="fixed top-0 right-0 h-full w-[85%] bg-white z-[150] shadow-[-20px_0_60px_rgba(0,0,0,0.1)] flex flex-col p-10 md:hidden"
             >
-              <div className="mt-20 flex flex-col gap-10">
+              <div className="mt-20 flex flex-col gap-8">
                 {navLinks.map((link) => (
                   <motion.div variants={linkVariants} key={link.name}>
                     <Link
@@ -122,13 +133,14 @@ export default function Navbar() {
                 ))}
               </div>
 
-              <motion.div variants={linkVariants} className="mt-auto">
-                <Link to="/contact"> {/* Example path */}
+              <motion.div variants={linkVariants} className="mt-auto space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Ready to grow?</p>
+                <Link to="/pricing" onClick={() => setOpen(false)}>
                   <button 
-                    style={{ backgroundColor: colors.ochreGold }}
+                    style={{ backgroundColor: colors.forestGreen }}
                     className="w-full py-5 rounded-2xl text-white font-bold text-lg shadow-xl flex items-center justify-center gap-3"
                   >
-                    Start Your Project <ArrowRight />
+                    Join Free <ArrowRight />
                   </button>
                 </Link>
               </motion.div>
