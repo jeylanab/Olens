@@ -19,7 +19,7 @@ const HighEnergyAbout = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-screen bg-[#050505] flex items-center justify-center py-20 overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden"
     >
       {/* --- BACKGROUND ANIMATIONS --- */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
@@ -92,7 +92,7 @@ const HighEnergyAbout = () => {
 
             <motion.h2 
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-              className="text-6xl lg:text-8xl font-black text-white tracking-tighter leading-[0.85] mb-8"
+              className="text-6xl lg:text-8xl font-black text-black tracking-tighter leading-[0.85] mb-8"
             >
               WE BUILD <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
