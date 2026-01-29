@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react"; 
+import { Link } from "react-router-dom"; // 1. Added Link import
 import logoImg from "../assets/logo.svg"; 
 
 export default function Navbar() {
@@ -19,14 +20,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 2. Added slashes to matches your App routes
   const navLinks = [
-    { name: "Services", href: "services" },
-    { name: "Portfolio", href: "portfolio" },
-    { name: "Pricing", href: "pricing" },
-    { name: "About", href: "about" },
+    { name: "Services", href: "/services" }, 
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "About", href: "/about" },
   ];
 
-  // Mobile Menu Animation Variants
   const menuVariants = {
     closed: { x: "100%", transition: { type: "spring", stiffness: 300, damping: 30 } },
     opened: { x: 0, transition: { type: "spring", stiffness: 300, damping: 30, staggerChildren: 0.1, delayChildren: 0.2 } }
@@ -44,31 +45,30 @@ export default function Navbar() {
         animate={{ y: 0 }}
         className={`max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-2xl transition-all duration-300 ${
           scrolled 
-          ? "bg-white/90 backdrop-blur-xl shadow-2xl border border-white/20 py-1" // Reduced padding on scroll
+          ? "bg-white/90 backdrop-blur-xl shadow-2xl border border-white/20 py-1"
           : "bg-transparent py-4"
         }`}
       >
-        {/* Logo Section - Scaled Down */}
-        <div className="flex items-center gap-2 cursor-pointer group">
+        {/* Logo - Use Link to go home */}
+        <Link to="/" className="flex items-center gap-2 cursor-pointer group">
           <img 
             src={logoImg} 
             alt="Olens Logo" 
-            href="/"
-            className="h-7 md:h-9 w-auto transition-transform group-hover:scale-105" // Logo is now smaller
+            className="h-7 md:h-9 w-auto transition-transform group-hover:scale-105" 
           />
-        </div>
+        </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Changed to Link */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.href} // Use 'to' instead of 'href'
               className="text-xs font-bold uppercase tracking-widest text-gray-700 hover:text-[#15803D] transition-colors relative group"
             >
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#15803D] transition-all group-hover:w-full"></span>
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -85,17 +85,14 @@ export default function Navbar() {
           </motion.button>
         </div>
 
-        {/* Mobile Toggle */}
         <button onClick={() => setOpen(!open)} className="md:hidden p-2 text-gray-900 z-[200]">
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {open && (
           <>
-            {/* Backdrop Blur */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -113,25 +110,27 @@ export default function Navbar() {
             >
               <div className="mt-20 flex flex-col gap-10">
                 {navLinks.map((link) => (
-                  <motion.a
-                    variants={linkVariants}
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="text-4xl font-black text-gray-900 hover:text-[#15803D] transition-colors"
-                  >
-                    {link.name}
-                  </motion.a>
+                  <motion.div variants={linkVariants} key={link.name}>
+                    <Link
+                      to={link.href}
+                      onClick={() => setOpen(false)}
+                      className="text-4xl font-black text-gray-900 hover:text-[#15803D] transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
 
               <motion.div variants={linkVariants} className="mt-auto">
-                <button 
-                  style={{ backgroundColor: colors.ochreGold }}
-                  className="w-full py-5 rounded-2xl text-white font-bold text-lg shadow-xl flex items-center justify-center gap-3"
-                >
-                  Start Your Project <ArrowRight />
-                </button>
+                <Link to="/contact"> {/* Example path */}
+                  <button 
+                    style={{ backgroundColor: colors.ochreGold }}
+                    className="w-full py-5 rounded-2xl text-white font-bold text-lg shadow-xl flex items-center justify-center gap-3"
+                  >
+                    Start Your Project <ArrowRight />
+                  </button>
+                </Link>
               </motion.div>
             </motion.div>
           </>
